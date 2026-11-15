@@ -9,3 +9,5 @@ Optional local AI runs on the PC. Instant insights and financial answers use app
 A PC activation code is derived from a hashed Windows installation identifier (or a persistent local fallback). Customer license files contain the registered name, term, expiry and PC code. Share them only with the software owner/support as needed. Password recovery codes are one-use and should be kept securely outside the PC. Recovery through an older backup can restore older credentials; secure and retire old backup copies appropriately.
 
 You control staff access, backup destinations, retention and any records shared with support. Closing the application does not delete records. Deactivating a license does not delete records.
+
+Remember me stores a random sign-in token in Windows Credential Manager and its hash in the encrypted shop database; the password is not saved. Sign-out and idle expiry end remembered sign-in. Trial first-use and clock information is retained separately from shop backups and mirrored in Windows Credential Manager.
