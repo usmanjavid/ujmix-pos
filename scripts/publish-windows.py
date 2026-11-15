@@ -41,13 +41,13 @@ for p in Path('docs').glob('*'):
 (stage/'SHA256SUMS.txt').write_text(''.join(f'{digest(p)}  {p.name}\n' for p in sorted(stage.iterdir())if p.name!='SHA256SUMS.txt'))
 notes=Path('release-notes.md');notes.write_text(f'''UJMix POS {version} for Windows 10/11 x64.\n\nDownload **{installer.name}**. Setup offers with or without optional local AI. No developer tools are required on the customer PC.\n\nSeven-day full trial, new blue branding, adjustable text size, four-hour default idle timeout, secure Remember me, three store phone fields and owner-editable receipt presentation. New invoice numbers start with the store name; saved invoice identities remain unchanged. Software-provider details remain separate at the bottom.\n\nDemo: username **demo**, password **demo123456**. After the trial, activate a 3-month, 6-month, 1-year, 3-year or lifetime license. Earlier UJ Retail customers should contact support for a replacement license before upgrading. Existing store-data identity is preserved. Close the old app and make a tested backup first.\n\nWindows build, archive validation and installed automated diagnostics passed. Physical shop devices and local tax requirements should be checked during your demo.\n\nWebsite: https://www.ujmix.com/ujmix-pos/ · WhatsApp: https://wa.me/923156843398 · Email: usmanjavid@gmail.com\n\nVerify SHA256SUMS.txt. Customer downloads contain no owner tools, issuer keys or application source.\n''')
 tag='v'+version
-existing=subprocess.run(['gh','release','view',tag,'--repo',repo,'--json','isDraft'],capture_output=True,text=True)
-if existing.returncode==0:
- assert json.loads(existing.stdout)['isDraft'],'Published versions are immutable'
+existing=next((r for r in json.loads(command(['gh','api',f'repos/{repo}/releases?per_page=100']))if r['tag_name']==tag),None)
+if existing is not None:
+ assert existing['draft'],'Published versions are immutable'
  subprocess.run(['gh','release','edit',tag,'--repo',repo,'--title',f'UJMix POS {version} — Windows x64','--notes-file',str(notes),'--prerelease'],check=True)
 else:subprocess.run(['gh','release','create',tag,'--repo',repo,'--title',f'UJMix POS {version} — Windows x64','--notes-file',str(notes),'--draft','--prerelease'],check=True)
 subprocess.run(['gh','release','upload',tag,'--repo',repo,'--clobber',*[str(p) for p in sorted(stage.iterdir())]],check=True)
-release=json.loads(command(['gh','api',f'repos/{repo}/releases/tags/{tag}']));remote={a['name']:a for a in release['assets']}
+release=next(r for r in json.loads(command(['gh','api',f'repos/{repo}/releases?per_page=100']))if r['tag_name']==tag);remote={a['name']:a for a in release['assets']}
 for p in stage.iterdir():
  item=remote[p.name];assert item['state']=='uploaded' and item['size']==p.stat().st_size
  if item.get('digest'):assert item['digest']=='sha256:'+digest(p)
