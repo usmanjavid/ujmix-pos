@@ -20,6 +20,14 @@ Windows installers are published under [Releases](https://github.com/usmanjavid/
 - Choose from 165 currency options and six core interface languages: English, Spanish, French, Arabic, Hindi and Urdu. Each store uses one accounting currency; some help text remains in English.
 - Make local backups or select a folder synced by your own OneDrive, Proton Drive, Google Drive or Dropbox desktop app.
 
+## Demo preview
+
+![UJMix POS checkout with sample products and prices](images/ujmix-pos-checkout-demo.png)
+
+*Demo data in PKR. Choose the appropriate accounting currency for your store during setup.*
+
+[Dashboard preview](images/ujmix-pos-dashboard-demo.png) · [Product stock preview](images/ujmix-pos-stock-demo.png)
+
 ## Demo and activation
 
 Use **Try demo** for separate sample records. Demo username: `demo` · password: `demo123456`.
