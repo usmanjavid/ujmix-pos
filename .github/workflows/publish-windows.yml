@@ -1,0 +1,31 @@
+name: Publish verified Windows download
+on:
+  workflow_dispatch:
+    inputs:
+      artifact_url:
+        description: Temporary URL for the verified customer-only build artifact
+        required: true
+        type: string
+      source_commit:
+        description: Verified private development commit SHA
+        required: true
+        type: string
+      source_run:
+        description: Successful Windows customer build run ID
+        required: true
+        type: string
+permissions:
+  contents: write
+jobs:
+  publish:
+    runs-on: windows-latest
+    timeout-minutes: 20
+    env:
+      GH_TOKEN: ${{ github.token }}
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Verify customer artifact and publish installer
+        run: python scripts/publish-windows.py
