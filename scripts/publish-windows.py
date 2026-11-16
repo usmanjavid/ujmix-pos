@@ -1,13 +1,13 @@
 """Publish only an explicitly authorized, verified customer installer; never application source or owner material."""
 from pathlib import Path
 import hashlib,json,os,re,shutil,subprocess,urllib.parse,urllib.request,zipfile
-inputs=json.loads(Path(os.environ['GITHUB_EVENT_PATH']).read_text())['inputs'];url=inputs['artifact_url']
+inputs=json.loads(Path(os.environ['GITHUB_EVENT_PATH']).read_text(encoding='utf-8'))['inputs'];url=inputs['artifact_url']
 parsed=urllib.parse.urlparse(url)
 assert parsed.scheme=='https' and parsed.hostname and (parsed.hostname.endswith('.blob.core.windows.net') or parsed.hostname.endswith('.actions.githubusercontent.com') or parsed.hostname.endswith('.vsblob.vsassets.io')),'Unexpected artifact download host'
 print('::add-mask::'+url,flush=True)
 assert re.fullmatch('[0-9a-f]{40}',inputs['source_commit']) and inputs['source_run'].isdigit()
 repo=os.environ['GITHUB_REPOSITORY'];assert repo=='usmanjavid/ujmix-pos'
-def command(args):return subprocess.check_output(args,text=True).strip()
+def command(args):return subprocess.check_output(args,text=True,encoding='utf-8').strip()
 assert not json.loads(command(['gh','api',f'repos/{repo}']))['private']
 archive=Path('customer-build.zip')
 try:
@@ -37,9 +37,9 @@ assert installer.stat().st_size==manifest['installer_bytes'] and digest(installe
 for name in ['LICENSE','LICENSES.md']:shutil.copy2(name,stage/name)
 for p in Path('docs').glob('*'):
  if p.is_file():shutil.copy2(p,stage/p.name)
-(stage/'release-manifest.json').write_text(json.dumps(manifest,indent=2)+'\n')
-(stage/'SHA256SUMS.txt').write_text(''.join(f'{digest(p)}  {p.name}\n' for p in sorted(stage.iterdir())if p.name!='SHA256SUMS.txt'))
-notes=Path('release-notes.md');notes.write_text(f'''UJMix POS {version} for Windows 10/11 x64.\n\nDownload **{installer.name}**. Setup offers with or without optional local AI. No developer tools are needed.\n\n- **Quick cash / F6** fills the remaining amount received, preserving other split payments. Quick cash is beside Cash and is recorded as Cash.\n- **Cash or percentage invoice discounts**: choose a default in Settings → Discounts, or switch on a POS/manual invoice. Cashier discounts still require manager approval.\n- New blue checkout-terminal icon. The optional assistant is **UJmix Ai** and its screen/settings appear only when AI is installed.\n- Shop setup is at the bottom of the dashboard, with a completion status.\n- Receipts keep **Software By ujmix.com** and a mobile icon with **+923156843398** on one line. Receipt customization is in owner Settings; final invoices remain view/print screens.\n\nSeven-day full trial; demo username **demo**, password **demo123456**. Activate a 3-month, 6-month, 1-year, 3-year or lifetime license after the trial. Licenses issued for UJMix POS 0.10.0 remain valid. Earlier UJ Retail license holders should contact support for reissue.\n\nBefore upgrading, close the application and make a tested backup. Windows build, archive validation, upgrade from 0.10.0 and installed diagnostics with/without AI passed. Test your own printer, scanner and local tax requirements during the demo.\n\nWebsite: https://www.ujmix.com/ujmix-pos/ · WhatsApp: https://wa.me/923156843398 · Email: usmanjavid@gmail.com\n\nVerify SHA256SUMS.txt. Customer downloads contain no owner tools, issuer keys or application source.\n''')
+(stage/'release-manifest.json').write_text(json.dumps(manifest,indent=2)+'\n',encoding='utf-8')
+(stage/'SHA256SUMS.txt').write_text(''.join(f'{digest(p)}  {p.name}\n' for p in sorted(stage.iterdir())if p.name!='SHA256SUMS.txt'),encoding='utf-8')
+notes=Path('release-notes.md');notes.write_text(f'''UJMix POS {version} for Windows 10/11 x64.\n\nDownload **{installer.name}**. Setup offers with or without optional local AI. No developer tools are needed.\n\n- **Quick cash / F6** fills the remaining amount received, preserving other split payments. Quick cash is beside Cash and is recorded as Cash.\n- **Cash or percentage invoice discounts**: choose a default in Settings → Discounts, or switch on a POS/manual invoice. Cashier discounts still require manager approval.\n- New blue checkout-terminal icon. The optional assistant is **UJmix Ai** and its screen/settings appear only when AI is installed.\n- Shop setup is at the bottom of the dashboard, with a completion status.\n- Receipts keep **Software By ujmix.com** and a mobile icon with **+923156843398** on one line. Receipt customization is in owner Settings; final invoices remain view/print screens.\n\nSeven-day full trial; demo username **demo**, password **demo123456**. Activate a 3-month, 6-month, 1-year, 3-year or lifetime license after the trial. Licenses issued for UJMix POS 0.10.0 remain valid. Earlier UJ Retail license holders should contact support for reissue.\n\nBefore upgrading, close the application and make a tested backup. Windows build, archive validation, upgrade from 0.10.0 and installed diagnostics with/without AI passed. Test your own printer, scanner and local tax requirements during the demo.\n\nWebsite: https://www.ujmix.com/ujmix-pos/ · WhatsApp: https://wa.me/923156843398 · Email: usmanjavid@gmail.com\n\nVerify SHA256SUMS.txt. Customer downloads contain no owner tools, issuer keys or application source.\n''',encoding='utf-8')
 tag='v'+version
 existing=next((r for r in json.loads(command(['gh','api',f'repos/{repo}/releases?per_page=100']))if r['tag_name']==tag),None)
 if existing is not None:
