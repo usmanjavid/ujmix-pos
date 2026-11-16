@@ -8,17 +8,21 @@ This is the official customer download repository. Application development is pr
 
 ## Download
 
-Windows installers are published under [Releases](https://github.com/usmanjavid/ujmix-pos/releases) after the Windows build and installation checks pass. Choose installation with or without optional local AI.
+Windows installers are published under [Releases](https://github.com/usmanjavid/ujmix-pos/releases) after the Windows build and installation checks pass. Choose installation with or without optional local AI. [Download version 0.11.0](https://github.com/usmanjavid/ujmix-pos/releases/tag/v0.11.0).
 
 ## What you can do
 
 - Try the full store features for seven days, then activate a purchased license.
 - Scan barcodes, create invoices, view history and manage product stock and customer balances.
-- Use three store contact numbers and customize receipt details, messages and paper size. The software-provider credit stays separate at the bottom.
+- Use Quick cash (F6) for the remaining bill balance, with split payments preserved.
+- Choose Cash or Percentage invoice discounts in Settings and switch on an individual POS or manual invoice.
+- Use three store contact numbers and customize receipt details, messages and paper size. Customize receipts in owner Settings. Software By ujmix.com and a mobile icon with +923156843398 stay on one line at the bottom, separate from your shop details.
 - Increase or decrease interface font size. New stores use a four-hour idle timeout; the owner can change it.
 - Select Remember me on a trusted Windows account. Sign-out and the configured idle timeout end remembered sign-in; the password is not saved.
 - Choose from 165 currency options and six core interface languages: English, Spanish, French, Arabic, Hindi and Urdu. Each store uses one accounting currency; some help text remains in English.
 - Make local backups or select a folder synced by your own OneDrive, Proton Drive, Google Drive or Dropbox desktop app.
+
+The optional UJmix Ai assistant and AI settings appear only if the AI model and runtime are installed. The shop setup checklist sits at the bottom of the dashboard.
 
 ## Demo preview
 
